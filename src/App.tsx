@@ -1,172 +1,36 @@
-import React, {useState, useCallback} from 'react';
-import {
-  Layout,
-  Page,
-  FooterHelp,
-  Card,
-  Link,
-  Button,
-  FormLayout,
-  TextField,
-  AccountConnection,
-  ChoiceList,
-  SettingToggle,
-} from '@shopify/polaris';
-import {ImportMinor} from '@shopify/polaris-icons';
-
-interface AccountProps {
-  onAction(): void;
-}
+import {Page, Layout, Frame} from '@shopify/polaris';
+import {APODCardList} from 'containers/APODCardList';
+import {useState} from 'react';
 
 export function App() {
-  const [first, setFirst] = useState('');
-  const [last, setLast] = useState('');
-  const [email, setEmail] = useState('');
-  const [checkboxes, setCheckboxes] = useState([]);
-  const [connected, setConnected] = useState(false);
-
-  const handleFirstChange = useCallback((value) => setFirst(value), []);
-  const handleLastChange = useCallback((value) => setLast(value), []);
-  const handleEmailChange = useCallback((value) => setEmail(value), []);
-  const handleCheckboxesChange = useCallback(
-    (value) => setCheckboxes(value),
-    [],
-  );
-
-  const toggleConnection = useCallback(() => {
-    setConnected(!connected);
-  }, [connected]);
-
-  const breadcrumbs = [
-    {content: 'Sample apps', url: '/sample-apps'},
-    {content: 'Create React App', url: '/create-react-app'},
-  ];
-  const primaryAction = {content: 'New product'};
-  const secondaryActions = [{content: 'Import', icon: ImportMinor}];
-
-  const choiceListItems = [
-    {label: 'I accept the Terms of Service', value: 'false'},
-    {label: 'I consent to receiving emails', value: 'false2'},
-  ];
-
-  const accountSectionDescription = connected
-    ? 'Disconnect your account from your Shopify store.'
-    : 'Connect your account to your Shopify store.';
-
-  const accountMarkup = connected ? (
-    <DisconnectAccount onAction={toggleConnection} />
-  ) : (
-    <ConnectAccount onAction={toggleConnection} />
-  );
-
+  const [page, setPage] = useState(0);
   return (
-    <Page
-      title="Polaris"
-      breadcrumbs={breadcrumbs}
-      primaryAction={primaryAction}
-      secondaryActions={secondaryActions}
-    >
-      <Layout>
-        <Layout.AnnotatedSection
-          title="Style"
-          description="Customize the style of your checkout"
-        >
-          <SettingToggle
-            action={{
-              content: 'Customize Checkout',
-            }}
-          >
-            Upload your store’s logo, change colors and fonts, and more.
-          </SettingToggle>
-        </Layout.AnnotatedSection>
-
-        <Layout.AnnotatedSection
-          title="Account"
-          description={accountSectionDescription}
-        >
-          {accountMarkup}
-        </Layout.AnnotatedSection>
-
-        <Layout.AnnotatedSection
-          title="Form"
-          description="A sample form using Polaris components."
-        >
-          <Card sectioned>
-            <FormLayout>
-              <FormLayout.Group>
-                <TextField
-                  value={first}
-                  label="First name"
-                  placeholder="Tom"
-                  onChange={handleFirstChange}
-                  autoComplete="given-name"
-                />
-                <TextField
-                  value={last}
-                  label="Last name"
-                  placeholder="Ford"
-                  onChange={handleLastChange}
-                  autoComplete="family-name"
-                />
-              </FormLayout.Group>
-
-              <TextField
-                value={email}
-                label="Email"
-                placeholder="example@email.com"
-                onChange={handleEmailChange}
-                autoComplete="email"
-              />
-
-              <ChoiceList
-                title="Terms & Consent"
-                titleHidden
-                allowMultiple
-                choices={choiceListItems}
-                selected={checkboxes}
-                onChange={handleCheckboxesChange}
-              />
-
-              <Button primary>Submit</Button>
-            </FormLayout>
-          </Card>
-        </Layout.AnnotatedSection>
-
-        <Layout.Section>
-          <FooterHelp>
-            For more details on Polaris, visit our{' '}
-            <Link url="https://polaris.shopify.com">style guide</Link>.
-          </FooterHelp>
-        </Layout.Section>
-      </Layout>
-    </Page>
+    // TODO aria controls
+    // TODO infinite scroll (pagination's behaviour on mobile) not functioning
+    // TODO i18n
+    // TODO unit & integration tests w/ Jest & jest-dom-mocks, e2e test w/ Cypress
+    // TODO schema.org & OpenGraph metadata
+    // TODO put date range in url & make url source of truth for date range. Add anchors (ids) for sharability
+    <Frame>
+      <Page
+        title="Spacestagram"
+        subtitle="Brought to you by NASA's Astronomy Photo of the Day (APOD) API"
+        narrowWidth
+        pagination={{
+          hasPrevious: page > 0,
+          hasNext: true,
+          onNext: () => setPage((page) => page + 1),
+          onPrevious: () => setPage((page) => page - 1),
+          accessibilityLabels: {next: 'Next page', previous: 'Previous page'},
+        }}
+      >
+        <Layout>
+          <Layout.AnnotatedSection>
+            <APODCardList page={page} />
+          </Layout.AnnotatedSection>
+        </Layout>
+      </Page>
+    </Frame>
   );
-}
-
-function ConnectAccount({onAction}: AccountProps) {
-  return (
-    <AccountConnection
-      action={{content: 'Connect', onAction}}
-      details="No account connected"
-      termsOfService={
-        <p>
-          By clicking Connect, you are accepting Sample’s{' '}
-          <Link url="https://polaris.shopify.com">Terms and Conditions</Link>,
-          including a commission rate of 15% on sales.
-        </p>
-      }
-    />
-  );
-}
-
-function DisconnectAccount({onAction}: AccountProps) {
-  return (
-    <AccountConnection
-      connected
-      action={{content: 'Disconnect', onAction}}
-      accountName="Tom Ford"
-      title={<Link url="http://google.com">Tom Ford</Link>}
-      details="Account id: d587647ae4"
-    />
-  );
+  // return <div>{JSON.stringify(items)}</div>;
 }

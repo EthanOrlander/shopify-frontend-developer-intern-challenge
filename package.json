@@ -2,30 +2,48 @@
   "name": "create-react-app-ts-react-testing",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ethanorlander.github.io/shopify-frontend-developer-intern-challenge",
   "dependencies": {
     "@shopify/polaris": "^6.4.0",
     "@shopify/polaris-icons": "^4.5.0",
     "@types/jest": "26.0.23",
     "@types/node": "15.3.0",
-    "@types/react": "16.9.19",
+    "@types/react": "^17.0.38",
     "@types/react-dom": "16.9.5",
-    "react": "^16.12.0",
+    "gh-pages": "^3.2.3",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
     "react-dom": "^16.12.0",
     "react-scripts": "4.0.3",
+    "styled-components": "^5.3.3",
     "typescript": "4.2.4"
   },
   "devDependencies": {
-    "@shopify/react-testing": "^2.3.5"
+    "@shopify/eslint-plugin": "^41.0.1",
+    "@shopify/prettier-config": "^1.1.2",
+    "@shopify/react-testing": "^2.3.5",
+    "@shopify/typescript-configs": "^5.1.0",
+    "@types/styled-components": "^5.1.20",
+    "eslint": "^8.7.0",
+    "eslint-plugin-jest": "^25.3.0",
+    "eslint-plugin-react-hooks": "^4.3",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1"
   },
   "engines": {
     "node": ">=10"
   },
   "scripts": {
+    "lint": "eslint .",
+    "format": "eslint . --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "prettier": "@shopify/prettier-config",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -37,5 +55,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }
